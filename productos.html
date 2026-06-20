@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>D.O.CELTEC - Productos</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">Muestra de Productos</p>
+      <h1>Productos y accesorios</h1>
+      <p class="subtitle">Aquí encontrarás algunos de los teléfonos, computadores y accesorios que ofrecemos.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="gallery">
+      <h2>Nuestros productos</h2>
+      <p>Haz click en una imagen para verla en grande.</p>
+
+      <!-- Contenedor donde el script generará las secciones por categoría -->
+      <div id="products-root"></div>
+
+      <!-- Modal simple para vista ampliada -->
+      <div id="lightbox" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); align-items:center; justify-content:center; z-index:9999;">
+        <img id="lightbox-img" src="" alt="" style="max-width:92%; max-height:92%; border-radius:8px; box-shadow:0 10px 40px rgba(0,0,0,0.6);" />
+      </div>
+
+      <script>
+        // productsData: edítalo para añadir más productos.
+        // Nombre de archivo: guarda la imagen en assets/ y usa exactamente ese nombre aquí.
+        const productsData = [
+          {
+            category: 'Celulares',
+            description: 'Teléfonos móviles: nuevos y usados en buen estado, diferentes marcas y modelos.',
+            items: [
+              { name: 'Celulares', image: 'celulares.jpeg' }
+            ]
+          },
+          {
+            category: 'Forros para celulares',
+            description: 'Forros, fundas protectoras y cables de conexión.',
+            items: [
+              { name: 'Forro 1', image: 'forros (1).jpeg' },
+              { name: 'Forro 2', image: 'forros (2).jpeg' },
+              { name: 'Forro 3', image: 'forros (3).jpeg' },
+              { name: 'Cable USB', image: 'cable.jpeg' },
+              { name: 'Cable USB 1', image: 'cable (1).jpeg' },
+              { name: 'Cable USB 2', image: 'cable (2).jpeg' },
+              { name: 'Cable USB 3', image: 'cable (3).jpeg' },
+              { name: 'Cable USB 4', image: 'cable (4).jpeg' },
+              { name: 'Cable USB 5', image: 'cable (5).jpeg' }
+            ]
+          },
+          {
+            category: 'Auriculares',
+            description: 'Auriculares, manos libres y dispositivos de audio.',
+            items: [
+              { name: 'Audífonos básicos', image: 'audifonos.jpeg' },
+              { name: 'Audífonos 1', image: 'audifonos (1).jpeg' },
+              { name: 'Audífonos 2', image: 'audifonos (2).jpeg' },
+              { name: 'Audífonos 3', image: 'audifonos (3).jpeg' },
+              { name: 'Audífonos 4', image: 'audifonos (4).jpeg' },
+              { name: 'Audífonos 5', image: 'audifonos (5).jpeg' },
+              { name: 'Audífonos 6', image: 'audifonos (6).jpeg' },
+              { name: 'Audífonos grandes', image: 'audifono grande.jpeg' },
+              { name: 'Audífonos grandes 2', image: 'audifono grande (2).jpeg' },
+              { name: 'Airpods', image: 'airpod.jpeg' },
+              { name: 'Airpods 2', image: 'airpod (2).jpeg' },
+              { name: 'Protector para audífonos', image: 'protector de audifonos.jpeg' },
+              { name: 'Protector para audífonos 2', image: 'protector de audifonos (2).jpeg' },
+              { name: 'Bluetooth audio', image: 'bluetooth.jpeg' }
+            ]
+          },
+          {
+            category: 'Cargadores',
+            description: 'Cargadores, adaptadores y fuentes de energía.',
+            items: [
+              { name: 'Cargador estándar', image: 'cargador.jpeg' },
+              { name: 'Cargador 2', image: 'cargador (2).jpeg' },
+              { name: 'Cargador 3', image: 'cargador (3).jpeg' },
+              { name: 'Cargador 4', image: 'cargador (4).jpeg' },
+              { name: 'Cargador de carro', image: 'cargador de carro.jpeg' },
+              { name: 'Cargador inalámbrico', image: 'cargador inalambrico.jpeg' },
+              { name: 'Cargador 3a', image: 'cargador(3).jpeg' },
+              { name: 'Cargadores 1', image: 'cargadores (1).jpeg' },
+              { name: 'Cargadores 2', image: 'cargadores (2).jpeg' }
+            ]
+          },
+          {
+            category: 'Llaveros',
+            description: 'Llaveros, colgantes y accesorios pequeños.',
+            items: [
+              { name: 'Llaveros 1', image: 'llaveros (1).jpeg' },
+              { name: 'Llaveros 2', image: 'llaveros (2).jpeg' },
+              { name: 'Llaveros 3', image: 'llaveros (3).jpeg' },
+              { name: 'Llaveros 4', image: 'llaveros (4).jpeg' },
+              { name: 'Llaveros 5', image: 'llaveros (5).jpeg' },
+              { name: 'Huellero', image: 'huellero.jpeg' }
+            ]
+          },
+          {
+            category: 'Papelería y otros',
+            description: 'Papelería, materiales promocionales y accesorios diversos.',
+            items: [
+              { name: 'Servicio técnico D.O.CELTEC', image: 'servicio.jpeg' },
+              { name: 'USB de música', image: 'usb musica.jpeg' },
+              { name: 'Compás', image: 'compas.jpeg' },
+              { name: 'Radio', image: 'radio.jpeg' },
+              { name: 'Otro accesorio', image: 'otro.jpeg' }
+            ]
+          }
+        ];
+
+        const root = document.getElementById('products-root');
+
+        function createCard(item) {
+          const article = document.createElement('article');
+          article.className = 'photo-card';
+
+          const imgPath = encodeURI(`assets/${item.image}`);
+
+          const link = document.createElement('a');
+          link.href = imgPath;
+          link.target = '_blank';
+          link.rel = 'noopener';
+
+          const img = document.createElement('img');
+          img.src = imgPath;
+          img.alt = item.name;
+          img.loading = 'lazy';
+          img.onerror = () => { img.style.opacity = 0.6; img.alt = 'Imagen no encontrada'; };
+          img.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lightbox = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lightbox-img');
+            lbImg.src = img.src;
+            lightbox.style.display = 'flex';
+          });
+
+          link.appendChild(img);
+          article.appendChild(link);
+
+          const p = document.createElement('p');
+          p.textContent = item.name;
+          article.appendChild(p);
+
+          return article;
+        }
+
+        productsData.forEach(section => {
+          const sec = document.createElement('div');
+          sec.className = 'product-section';
+
+          const h3 = document.createElement('h3');
+          h3.textContent = section.category;
+          h3.style.color = 'var(--primary)';
+          sec.appendChild(h3);
+
+          const desc = document.createElement('p');
+          desc.textContent = section.description;
+          desc.style.color = 'var(--muted)';
+          sec.appendChild(desc);
+
+          const grid = document.createElement('div');
+          grid.className = 'image-grid';
+
+          if (section.items.length === 0) {
+            const note = document.createElement('p');
+            note.textContent = 'No hay productos cargados en esta sección todavía.';
+            note.style.fontStyle = 'italic';
+            note.style.color = 'var(--muted)';
+            sec.appendChild(note);
+          }
+
+          section.items.forEach(item => grid.appendChild(createCard(item)));
+
+          sec.appendChild(grid);
+          root.appendChild(sec);
+        });
+
+        // Cerrar lightbox al clic
+        document.getElementById('lightbox').addEventListener('click', () => {
+          const lightbox = document.getElementById('lightbox');
+          lightbox.style.display = 'none';
+          document.getElementById('lightbox-img').src = '';
+        });
+      </script>
+  </main>
+
+  <footer class="footer">
+    <p>Volver a la <a href="index.html">página principal</a></p>
+  </footer>
+</body>
+</html>
